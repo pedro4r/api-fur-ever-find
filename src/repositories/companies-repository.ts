@@ -1,5 +1,5 @@
 import { Prisma, Company } from '@prisma/client'
 
-export interface UsersRepository {
+export interface CompaniesRepository {
     create(data: Prisma.CompanyCreateInput): Promise<Company>
 }

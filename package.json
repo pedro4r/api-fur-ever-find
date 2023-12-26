@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run --dir src/use-cases"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +15,9 @@
     "@types/node": "20.10.5",
     "eslint": "8.56.0",
     "prisma": "5.7.1",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "vite-tsconfig-paths": "4.0.5",
+    "vitest": "0.28.5"
   },
   "dependencies": {
     "@prisma/client": "5.7.1",
