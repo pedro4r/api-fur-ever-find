@@ -1,0 +1,23 @@
+{
+    "extends": [
+        "@rocketseat/eslint-config/node"
+    ],
+    "rules": {
+        "camelcase": "off",
+        "no-useless-constructor": "off",
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto",
+                "printWidth": 80,
+                "trailingComma": "es5",
+                "semi": false,
+                "doubleQuote": true,
+                "jsxSingleQuote": true,
+                "singleQuote": true,
+                "useTabs": false,
+                "tabWidth": 4
+            }
+        ]
+    }
+}
