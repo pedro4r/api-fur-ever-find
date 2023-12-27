@@ -17,7 +17,7 @@ interface CreateCompanyUseCaseResponse {
     company: Company
 }
 
-export class CreateCompanyUseCase {
+export class RegisterCompanyUseCase {
     // eslint-disable-next-line prettier/prettier
     constructor(private companyRepository: CompaniesRepository) { }
 
