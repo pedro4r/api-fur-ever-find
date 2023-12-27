@@ -5,6 +5,14 @@ import { CompaniesRepository } from '../companies-repository'
 export class InMemoryCompaniesRepository implements CompaniesRepository {
     public items: Company[] = []
 
+    async findByEmail(email: string) {
+        const company = this.items.find((company) => company.email === email)
+        if (!company) {
+            return null
+        }
+        return company
+    }
+
     async create(data: Prisma.CompanyCreateInput) {
         const company = {
             id: data.id ?? randomUUID(),

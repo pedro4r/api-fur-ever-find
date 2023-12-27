@@ -8,7 +8,7 @@ interface CreateCompanyUseCaseRequest {
     address: string
     zipcode: string
     phone: string
-    password_hash: string
+    password: string
 }
 
 interface CreateCompanyUseCaseResponse {
@@ -26,7 +26,7 @@ export class CreateCompanyUseCase {
         address,
         zipcode,
         phone,
-        password_hash,
+        password,
     }: CreateCompanyUseCaseRequest): Promise<CreateCompanyUseCaseResponse> {
         const company = await this.companyRepository.create({
             admin_name,
@@ -35,7 +35,7 @@ export class CreateCompanyUseCase {
             address,
             zipcode,
             phone,
-            password_hash,
+            password_hash: password,
         })
 
         return { company }
