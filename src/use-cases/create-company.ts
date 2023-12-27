@@ -1,5 +1,7 @@
 import { CompaniesRepository } from '@/repositories/companies-repository'
 import { Company } from '@prisma/client'
+import { hash } from 'bcryptjs'
+import { CompanyAlreadyExistsError } from './errors/company-already-exists-error'
 
 interface CreateCompanyUseCaseRequest {
     admin_name: string
@@ -28,6 +30,14 @@ export class CreateCompanyUseCase {
         phone,
         password,
     }: CreateCompanyUseCaseRequest): Promise<CreateCompanyUseCaseResponse> {
+        const companyWithSameEmail =
+            await this.companyRepository.findByEmail(email)
+
+        if (companyWithSameEmail) {
+            throw new CompanyAlreadyExistsError()
+        }
+
+        const password_hash = await hash(password, 6)
         const company = await this.companyRepository.create({
             admin_name,
             name,
@@ -35,7 +45,7 @@ export class CreateCompanyUseCase {
             address,
             zipcode,
             phone,
-            password_hash: password,
+            password_hash,
         })
 
         return { company }

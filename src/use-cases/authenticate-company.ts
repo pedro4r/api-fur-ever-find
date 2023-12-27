@@ -22,6 +22,7 @@ export class AuthenticateCompanyUseCase {
     }: AuthenticateCompanyUseCaseRequest): Promise<AuthenticateCompanyUseCaseResponse> {
         const company = await this.companyRepository.findByEmail(email)
 
+        console.log('achei: ' + JSON.stringify(company))
         if (!company) {
             throw new InvalidCredentialsError()
         }
