@@ -28,8 +28,8 @@ model Pet {
   petimages PetImage[]
 
   created_at DateTime @default(now())
-  Company    Company? @relation(fields: [companyId], references: [id])
-  companyId  String?
+  Company    Company  @relation(fields: [company_id], references: [id])
+  company_id String
 
   @@map("pets")
 }

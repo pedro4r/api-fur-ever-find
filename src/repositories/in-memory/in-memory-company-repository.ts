@@ -1,9 +1,29 @@
 import { Company, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { CompaniesRepository } from '../companies-repository'
+import { mockGetDistanceBetweenZipCodes } from '@/utils/mocks/mock-get-distance-between-zipcodes'
 
 export class InMemoryCompaniesRepository implements CompaniesRepository {
     public items: Company[] = []
+
+    async findManyNearbyCompany(userZipcode: string) {
+        const nearbyCompanies: Company[] = []
+
+        for (const item of this.items) {
+            const distance = await mockGetDistanceBetweenZipCodes({
+                userZipcode,
+                companyZipcode: item.zipcode,
+            })
+
+            if (distance < 10) {
+                nearbyCompanies.push(item)
+            }
+        }
+
+        console.log(nearbyCompanies)
+
+        return nearbyCompanies
+    }
 
     async findByEmail(email: string) {
         const company = this.items.find((company) => company.email === email)
