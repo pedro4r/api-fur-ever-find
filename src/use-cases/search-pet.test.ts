@@ -2,7 +2,7 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryCompaniesRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
 import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pet-repository'
-import { SearchPetByZipcodeUseCase } from './search-pet-by-zipcode'
+import { SearchPetByZipcodeUseCase } from './search-pet'
 
 let companiesRepository: InMemoryCompaniesRepository
 let petsRepository: InMemoryPetsRepository
@@ -47,6 +47,15 @@ describe('Search Pet Bt Zipcode Use Case', () => {
         })
 
         await petsRepository.create({
+            name: 'Laik',
+            description: 'Very friendly cat',
+            activity_lvl: 5,
+            wide_environment: true,
+            smallness_lvl: 3,
+            company_id: 'company-01',
+        })
+
+        await petsRepository.create({
             name: 'Pixie',
             description: 'A beautiful lady female',
             activity_lvl: 10,
@@ -57,7 +66,10 @@ describe('Search Pet Bt Zipcode Use Case', () => {
 
         const { pets } = await sut.execute({ userZipcode: '32839' })
 
-        expect(pets).toHaveLength(1)
-        expect(pets).toEqual([expect.objectContaining({ name: 'Bjorn' })])
+        expect(pets).toHaveLength(2)
+        expect(pets).toEqual([
+            expect.objectContaining({ name: 'Bjorn' }),
+            expect.objectContaining({ name: 'Laik' }),
+        ])
     })
 })
