@@ -7,19 +7,21 @@ import { CompaniesRepository } from '../companies-repository'
 export class InMemoryPetsRepository implements PetsRepository {
     public items: Pet[] = []
     public companies: Company[] = []
-    private companiesRepository: CompaniesRepository
+    private companiesRepository?: CompaniesRepository
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    constructor(companiesRepository: CompaniesRepository) {
-        this.companiesRepository = companiesRepository
+    constructor(companiesRepository?: CompaniesRepository) {
+        if (companiesRepository) {
+            this.companiesRepository = companiesRepository
+        }
     }
 
     async fetchPets({ userZipcode, description, activity_lvl, wide_environment, smallness_lvl }: FetchPetsParams) {
 
-        const nearbyCompanies = await this.companiesRepository.findManyNearbyCompany(userZipcode)
+        const nearbyCompanies = await this.companiesRepository?.findManyNearbyCompany(userZipcode)
 
         const petsWithMatchingCompanyIds = this.items.filter((pet) =>
-            nearbyCompanies.some((company) => pet.company_id === company.id)
+            nearbyCompanies?.some((company) => pet.company_id === company.id)
         )
 
         // const oi2 = smallness_lvl ? new Prisma.Decimal(smallness_lvl.toString()) : null

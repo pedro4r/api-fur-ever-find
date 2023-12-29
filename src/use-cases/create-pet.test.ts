@@ -8,7 +8,6 @@ let sut: CreatePetUseCase
 describe('Register Company Use Case', () => {
     beforeEach(async () => {
         petsRepository = new InMemoryPetsRepository()
-
         sut = new CreatePetUseCase(petsRepository)
     })
     it('should to able to register a pet', async () => {
