@@ -3,10 +3,14 @@ import { PetsRepository } from '@/repositories/pets-repository'
 
 interface SearchPetByZipcodeUseCaseRequest {
     userZipcode: string
+    description?: string
+    activity_lvl?: number
+    wide_environment?: boolean
+    smallness_lvl?: number
 }
 
 interface SearchPetByZipcodeUseCaseResponse {
-    pets: Pet[]
+    pets: Pet[] | null
 }
 
 export class SearchPetByZipcodeUseCase {
@@ -15,8 +19,18 @@ export class SearchPetByZipcodeUseCase {
 
     async execute({
         userZipcode,
+        description,
+        activity_lvl,
+        wide_environment,
+        smallness_lvl,
     }: SearchPetByZipcodeUseCaseRequest): Promise<SearchPetByZipcodeUseCaseResponse> {
-        const pets = await this.petRepository.fetchPets(userZipcode)
+        const pets = await this.petRepository.fetchPets({
+            userZipcode,
+            description,
+            activity_lvl,
+            wide_environment,
+            smallness_lvl,
+        })
         return { pets }
     }
 }

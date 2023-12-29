@@ -9,7 +9,7 @@ export function mockGetDistanceBetweenZipCodes({
 }: mockGetDistanceBetweenZipCodesParams): Promise<number> {
     let distance: number
 
-    if (companyZipcode === '32839') {
+    if (userZipcode === companyZipcode) {
         distance = 5
     } else {
         distance = 300
@@ -18,6 +18,6 @@ export function mockGetDistanceBetweenZipCodes({
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(distance)
-        }, 300) // 3000 milissegundos = 3 segundos de atraso
+        }, 300)
     })
 }

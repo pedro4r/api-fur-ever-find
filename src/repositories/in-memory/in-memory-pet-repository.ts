@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Company, Pet, Prisma } from '@prisma/client'
-import { PetsRepository } from '../pets-repository'
+import { FetchPetsParams, PetsRepository } from '../pets-repository'
 import { randomUUID } from 'crypto'
 import { CompaniesRepository } from '../companies-repository'
 
@@ -14,15 +14,24 @@ export class InMemoryPetsRepository implements PetsRepository {
         this.companiesRepository = companiesRepository
     }
 
-    async fetchPets(userZipcode: string) {
+    async fetchPets({ userZipcode, description, activity_lvl, wide_environment, smallness_lvl }: FetchPetsParams) {
+
         const nearbyCompanies = await this.companiesRepository.findManyNearbyCompany(userZipcode)
 
         const petsWithMatchingCompanyIds = this.items.filter((pet) =>
             nearbyCompanies.some((company) => pet.company_id === company.id)
         )
 
-        return petsWithMatchingCompanyIds
+        // const oi2 = smallness_lvl ? new Prisma.Decimal(smallness_lvl.toString()) : null
 
+        const petsWithMatchingWithOtherParams = petsWithMatchingCompanyIds
+            .filter(pet => description === undefined || pet.description?.includes(description))
+            .filter(pet => activity_lvl === undefined || pet.activity_lvl?.toNumber() === activity_lvl)
+            .filter(pet => wide_environment === undefined || pet.wide_environment === wide_environment)
+            .filter(pet => smallness_lvl === undefined || pet.smallness_lvl?.toNumber() === smallness_lvl)
+
+
+        return petsWithMatchingWithOtherParams
     }
 
     async create(data: Prisma.PetUncheckedCreateInput) {
