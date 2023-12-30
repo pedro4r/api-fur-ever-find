@@ -1,26 +1,46 @@
 import { Company, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { CompaniesRepository } from '../companies-repository'
-import { mockGetDistanceBetweenZipCodes } from '@/utils/mocks/mock-get-distance-between-zipcodes'
+import { getCoordinates } from '@/utils/mocks/mock-get-coordinates'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates'
 
 export class InMemoryCompaniesRepository implements CompaniesRepository {
     public items: Company[] = []
 
     async findManyNearbyCompany(userZipcode: string) {
-        const nearbyCompanies: Company[] = []
+        const { lat, lng } = getCoordinates(userZipcode)
 
-        for (const item of this.items) {
-            const distance = await mockGetDistanceBetweenZipCodes({
-                userZipcode,
-                companyZipcode: item.zipcode,
-            })
+        return this.items.filter((item) => {
+            if (!item.latitude || !item.longitude) {
+                const { lat: companyLat, lng: companyLng } = getCoordinates(
+                    item.zipcode
+                )
+                const distance = getDistanceBetweenCoordinates(
+                    {
+                        latitude: lat,
+                        longitude: lng,
+                    },
+                    {
+                        latitude: companyLat,
+                        longitude: companyLng,
+                    }
+                )
+                return distance < 10
+            } else {
+                const distance = getDistanceBetweenCoordinates(
+                    {
+                        latitude: lat,
+                        longitude: lng,
+                    },
+                    {
+                        latitude: item.latitude.toNumber(),
+                        longitude: item.longitude.toNumber(),
+                    }
+                )
 
-            if (distance < 10) {
-                nearbyCompanies.push(item)
+                return distance < 10
             }
-        }
-
-        return nearbyCompanies
+        })
     }
 
     async findByEmail(email: string) {
@@ -32,6 +52,8 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
     }
 
     async create(data: Prisma.CompanyCreateInput) {
+        const { lat, lng } = getCoordinates(data.zipcode)
+
         const company = {
             id: data.id ?? randomUUID(),
             admin_name: data.admin_name,
@@ -40,6 +62,8 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
             address: data.address,
             zipcode: data.zipcode,
             phone: data.phone,
+            latitude: new Prisma.Decimal(lat.toString()),
+            longitude: new Prisma.Decimal(lng.toString()),
             password_hash: data.password_hash,
             created_at: new Date(),
         }

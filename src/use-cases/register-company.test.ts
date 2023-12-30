@@ -12,7 +12,7 @@ describe('Register Company Use Case', () => {
         companiesRepository = new InMemoryCompaniesRepository()
         sut = new RegisterCompanyUseCase(companiesRepository)
     })
-    it('should to able to register', async () => {
+    it('should be able to register', async () => {
         const { company } = await sut.execute({
             admin_name: 'Pedro Requiao',
             name: 'Ragdolls Cattery',

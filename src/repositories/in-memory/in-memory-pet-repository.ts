@@ -16,6 +16,16 @@ export class InMemoryPetsRepository implements PetsRepository {
         }
     }
 
+    async findById(id: string) {
+        const pet = this.items.find((item) => item.id === id)
+
+        if (!pet) {
+            return null
+        }
+
+        return pet
+    }
+
     async fetchPets({ userZipcode, description, activity_lvl, wide_environment, smallness_lvl }: FetchPetsParams) {
 
         const nearbyCompanies = await this.companiesRepository?.findManyNearbyCompany(userZipcode)
@@ -24,14 +34,11 @@ export class InMemoryPetsRepository implements PetsRepository {
             nearbyCompanies?.some((company) => pet.company_id === company.id)
         )
 
-        // const oi2 = smallness_lvl ? new Prisma.Decimal(smallness_lvl.toString()) : null
-
         const petsWithMatchingWithOtherParams = petsWithMatchingCompanyIds
             .filter(pet => description === undefined || pet.description?.includes(description))
             .filter(pet => activity_lvl === undefined || pet.activity_lvl?.toNumber() === activity_lvl)
             .filter(pet => wide_environment === undefined || pet.wide_environment === wide_environment)
             .filter(pet => smallness_lvl === undefined || pet.smallness_lvl?.toNumber() === smallness_lvl)
-
 
         return petsWithMatchingWithOtherParams
     }

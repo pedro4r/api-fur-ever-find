@@ -2,17 +2,17 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryCompaniesRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
 import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pet-repository'
-import { SearchPetByZipcodeUseCase } from './search-pet'
+import { FetchPetsByFiltersUseCase } from './fetch-pets'
 
 let companiesRepository: InMemoryCompaniesRepository
 let petsRepository: InMemoryPetsRepository
-let sut: SearchPetByZipcodeUseCase
+let sut: FetchPetsByFiltersUseCase
 
 describe('Search Pet Bt Zipcode Use Case', () => {
     beforeEach(() => {
         companiesRepository = new InMemoryCompaniesRepository()
         petsRepository = new InMemoryPetsRepository(companiesRepository)
-        sut = new SearchPetByZipcodeUseCase(petsRepository)
+        sut = new FetchPetsByFiltersUseCase(petsRepository)
     })
     it('should be able to find pets by zipcode only', async () => {
         await companiesRepository.create({

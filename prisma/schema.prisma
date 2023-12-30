@@ -53,13 +53,17 @@ model PetImage {
 }
 
 model Company {
-  id            String   @id @default(uuid())
-  admin_name    String
-  name          String
-  email         String   @unique
-  address       String
-  zipcode       String
-  phone         String
+  id         String @id @default(uuid())
+  admin_name String
+  name       String
+  email      String @unique
+  address    String
+  zipcode    String
+  phone      String
+
+  latitude  Decimal?
+  longitude Decimal?
+
   password_hash String
   created_at    DateTime @default(now())
 

@@ -10,7 +10,7 @@ describe('Register Company Use Case', () => {
         petsRepository = new InMemoryPetsRepository()
         sut = new CreatePetUseCase(petsRepository)
     })
-    it('should to able to register a pet', async () => {
+    it('should be able to register a pet', async () => {
         const { pet } = await sut.execute({
             name: 'Bjorn',
             description: 'Lazy cat and fat',

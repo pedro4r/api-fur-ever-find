@@ -11,4 +11,5 @@ export interface FetchPetsParams {
 export interface PetsRepository {
     create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
     fetchPets(params: FetchPetsParams): Promise<Pet[] | null>
+    findById(id: string): Promise<Pet | null>
 }

@@ -12,7 +12,7 @@ describe('Authenticate Company Use Case', () => {
         companiesRepository = new InMemoryCompaniesRepository()
         sut = new AuthenticateCompanyUseCase(companiesRepository)
     })
-    it('should to able to authenticate company', async () => {
+    it('should be able to authenticate company', async () => {
         await companiesRepository.create({
             admin_name: 'Pedro Requiao',
             name: 'Ragdolls Cattery',

@@ -1,7 +1,7 @@
 import { Company, Pet } from '@prisma/client'
 import { PetsRepository } from '@/repositories/pets-repository'
 
-interface SearchPetByZipcodeUseCaseRequest {
+interface FetchPetsByFiltersUseCaseRequest {
     userZipcode: string
     description?: string
     activity_lvl?: number
@@ -9,11 +9,11 @@ interface SearchPetByZipcodeUseCaseRequest {
     smallness_lvl?: number
 }
 
-interface SearchPetByZipcodeUseCaseResponse {
+interface FetchPetsByFiltersUseCaseResponse {
     pets: Pet[] | null
 }
 
-export class SearchPetByZipcodeUseCase {
+export class FetchPetsByFiltersUseCase {
     // eslint-disable-next-line prettier/prettier
     constructor(private petRepository: PetsRepository) { }
 
@@ -23,7 +23,7 @@ export class SearchPetByZipcodeUseCase {
         activity_lvl,
         wide_environment,
         smallness_lvl,
-    }: SearchPetByZipcodeUseCaseRequest): Promise<SearchPetByZipcodeUseCaseResponse> {
+    }: FetchPetsByFiltersUseCaseRequest): Promise<FetchPetsByFiltersUseCaseResponse> {
         const pets = await this.petRepository.fetchPets({
             userZipcode,
             description,
