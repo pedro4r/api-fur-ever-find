@@ -1,4 +1,4 @@
-import { CompaniesRepository } from '@/repositories/companies-repository'
+import { CompaniesRepository } from '@/repositories/company-repository'
 import { Company } from '@prisma/client'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 import { compare } from 'bcryptjs'

@@ -1,4 +1,4 @@
-import { CompaniesRepository } from '@/repositories/companies-repository'
+import { CompaniesRepository } from '@/repositories/company-repository'
 import { Company } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { CompanyAlreadyExistsError } from './errors/company-already-exists-error'

@@ -2,7 +2,7 @@
 import { Company, Pet, Prisma } from '@prisma/client'
 import { FetchPetsParams, PetsRepository } from '../pets-repository'
 import { randomUUID } from 'crypto'
-import { CompaniesRepository } from '../companies-repository'
+import { CompaniesRepository } from '../company-repository'
 
 export class InMemoryPetsRepository implements PetsRepository {
     public items: Pet[] = []

@@ -1,17 +1,30 @@
 import { Company, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
-import { CompaniesRepository } from '../companies-repository'
-import { mockGetDistanceBetweenZipCodes } from '@/utils/mocks/mock-get-distance-between-zipcodes'
+import { CompaniesRepository } from '../company-repository'
+import { getCoordinates } from '@/utils/get-coordinates'
+import { prisma } from '@/lib/prisma'
 
-export class InMemoryCompaniesRepository implements CompaniesRepository {
+export class PrismaCompanyRepository implements CompaniesRepository {
     public items: Company[] = []
 
-    async findManyNearbyCompany(userZipcode: string) {
-        const gyms = await prisma.$queryRaw<Company[]>`
-        SELECT * from gyms
-        WHERE ( 6371 * acos( cos( radians(${latitude}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( latitude ) ) ) ) <= 10
-        `
-        return gyms
+    async create(data: Prisma.CompanyCreateInput) {
+        const { lat, lng } = await getCoordinates(data.zipcode)
+        const company = {
+            id: data.id ?? randomUUID(),
+            admin_name: data.admin_name,
+            name: data.name,
+            email: data.email,
+            address: data.address,
+            zipcode: data.zipcode,
+            phone: data.phone,
+            latitude: new Prisma.Decimal(lat.toString()),
+            longitude: new Prisma.Decimal(lng.toString()),
+            password_hash: data.password_hash,
+            created_at: new Date(),
+        }
+        this.items.push(company)
+
+        return company
     }
 
     async findByEmail(email: string) {
@@ -22,20 +35,13 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
         return company
     }
 
-    async create(data: Prisma.CompanyCreateInput) {
-        const company = {
-            id: data.id ?? randomUUID(),
-            admin_name: data.admin_name,
-            name: data.name,
-            email: data.email,
-            address: data.address,
-            zipcode: data.zipcode,
-            phone: data.phone,
-            password_hash: data.password_hash,
-            created_at: new Date(),
-        }
-        this.items.push(company)
+    async findManyNearbyCompany(userZipcode: string) {
+        const { lat, lng } = await getCoordinates(userZipcode)
 
-        return company
+        const gyms = await prisma.$queryRaw<Company[]>`
+        SELECT * from gyms
+        WHERE ( 6371 * acos( cos( radians(${lat}) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( latitude ) ) ) ) <= 10
+        `
+        return gyms
     }
 }

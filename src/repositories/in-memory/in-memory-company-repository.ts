@@ -1,6 +1,6 @@
 import { Company, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
-import { CompaniesRepository } from '../companies-repository'
+import { CompaniesRepository } from '../company-repository'
 import { getCoordinates } from '@/utils/mocks/mock-get-coordinates'
 import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates'
 

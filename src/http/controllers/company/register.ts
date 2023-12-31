@@ -1,31 +1,41 @@
+import { CompanyAlreadyExistsError } from '@/use-cases/errors/company-already-exists-error'
+import { makeRegisterCompanyUseCase } from '@/use-cases/factories/make-register-company-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-export async function create(request: FastifyRequest, reply: FastifyReply) {
+export async function register(request: FastifyRequest, reply: FastifyReply) {
     const createBodySchema = z.object({
-        title: z.string(),
-        description: z.string().nullable(),
-        phone: z.string().nullable(),
-        latitude: z.number().refine((value) => {
-            return Math.abs(value) <= 90
-        }),
-        longitude: z.number().refine((value) => {
-            return Math.abs(value) <= 180
-        }),
+        admin_name: z.string(),
+        name: z.string(),
+        email: z.string(),
+        address: z.string(),
+        zipcode: z.string(),
+        phone: z.string(),
+        password: z.string().min(6),
     })
 
-    const { title, description, phone, latitude, longitude } =
+    const { admin_name, name, email, address, zipcode, phone, password } =
         createBodySchema.parse(request.body)
 
-    const createGymUseCase = makeCreateGymUseCase()
+    try {
+        const createGymUseCase = makeRegisterCompanyUseCase()
 
-    await createGymUseCase.execute({
-        title,
-        description,
-        phone,
-        latitude,
-        longitude,
-    })
+        await createGymUseCase.execute({
+            admin_name,
+            name,
+            email,
+            address,
+            zipcode,
+            phone,
+            password,
+        })
+    } catch (err) {
+        if (err instanceof CompanyAlreadyExistsError) {
+            return reply.status(409).send({ message: err.message })
+        }
+
+        throw err
+    }
 
     return reply.status(201).send()
 }

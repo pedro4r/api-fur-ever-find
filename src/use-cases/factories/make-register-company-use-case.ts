@@ -1,8 +1,9 @@
+import { PrismaCompanyRepository } from '@/repositories/prisma/prisma-company-repository'
 import { RegisterCompanyUseCase } from '../register-company'
 
-export function makeCreateGymUseCase() {
-    const gymsRepository = new PrismaGymsRepository()
-    const useCase = new RegisterCompanyUseCase(gymsRepository)
+export function makeRegisterCompanyUseCase() {
+    const companyRepository = new PrismaCompanyRepository()
+    const useCase = new RegisterCompanyUseCase(companyRepository)
 
     return useCase
 }
