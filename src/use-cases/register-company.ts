@@ -10,6 +10,8 @@ interface CreateCompanyUseCaseRequest {
     address: string
     zipcode: string
     phone: string
+    latitude?: number
+    longitude?: number
     password: string
 }
 
@@ -29,6 +31,8 @@ export class RegisterCompanyUseCase {
         zipcode,
         phone,
         password,
+        latitude,
+        longitude,
     }: CreateCompanyUseCaseRequest): Promise<CreateCompanyUseCaseResponse> {
         const companyWithSameEmail =
             await this.companyRepository.findByEmail(email)
@@ -46,6 +50,8 @@ export class RegisterCompanyUseCase {
             zipcode,
             phone,
             password_hash,
+            latitude,
+            longitude,
         })
 
         return { company }

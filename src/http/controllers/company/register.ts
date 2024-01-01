@@ -1,5 +1,6 @@
 import { CompanyAlreadyExistsError } from '@/use-cases/errors/company-already-exists-error'
 import { makeRegisterCompanyUseCase } from '@/use-cases/factories/make-register-company-use-case'
+import { getCoordinates } from '@/utils/get-coordinates'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
@@ -18,17 +19,23 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
         createBodySchema.parse(request.body)
 
     try {
-        const createGymUseCase = makeRegisterCompanyUseCase()
+        const createCompanyUseCase = makeRegisterCompanyUseCase()
 
-        await createGymUseCase.execute({
+        const { lat, lng } = await getCoordinates(zipcode)
+
+        const company = await createCompanyUseCase.execute({
             admin_name,
             name,
             email,
             address,
             zipcode,
             phone,
+            latitude: lat,
+            longitude: lng,
             password,
         })
+
+        return reply.status(201).send(company)
     } catch (err) {
         if (err instanceof CompanyAlreadyExistsError) {
             return reply.status(409).send({ message: err.message })
@@ -36,6 +43,4 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
         throw err
     }
-
-    return reply.status(201).send()
 }
