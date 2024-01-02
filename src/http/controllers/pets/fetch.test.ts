@@ -80,8 +80,6 @@ describe('Fetch (e2e)', () => {
             })
             .send()
 
-        console.log(response.statusCode)
-
         expect(response.body.pets).toHaveLength(1)
         expect(response.body.pets[0].name).toEqual('Bjorn')
     })

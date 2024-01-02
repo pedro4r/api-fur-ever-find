@@ -1,15 +1,15 @@
-### Regras da aplicação
-- [x] Deve ser possível cadastrar um pet
-- [x] Deve ser possível listar todos os pets disponíveis para adoção em uma cidade
-- [x] Deve ser possível filtrar pets por suas características
-- [x] Deve ser possível visualizar detalhes de um pet para adoção
-- [x] Deve ser possível se cadastrar como uma ORG
-- [x] Deve ser possível realizar login como uma ORG
+### Application Rules
+- [x] It must be possible to register a pet
+- [x] It must be possible to list all pets available for adoption in a city
+- [x] It must be possible to filter pets by their characteristics
+- [x] It must be possible to view details of a pet available for adoption
+- [x] It must be possible to register as an ORG
+- [x] It must be possible to log in as an ORG
 
-### Regras de negócio
-- [x] Para listar os pets, obrigatoriamente precisamos informar a cidade
-- [x] Uma ORG precisa ter um endereço e um número de WhatsApp
-- [x] Um pet deve estar ligado a uma ORG
-- [x] O usuário que quer adotar, entrará em contato com a ORG via WhatsApp
-- [x] Todos os filtros, além da cidade, são opcionais
-- [x] Para uma ORG acessar a aplicação como admin, ela precisa estar logada
+### Business Rules
+- [x] To list pets, the city must be provided
+- [x] An ORG needs to have an address and a WhatsApp number
+- [x] A pet must be associated with an ORG
+- [x] The user willing to adopt will contact the ORG via WhatsApp
+- [x] All filters, besides the city, are optional
+- [x] For an ORG to access the application as an admin, they need to be logged in
