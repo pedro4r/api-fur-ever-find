@@ -6,6 +6,7 @@ export interface FetchPetsParams {
     activity_lvl?: number
     wide_environment?: boolean
     smallness_lvl?: number
+    page?: number
 }
 
 export interface PetsRepository {

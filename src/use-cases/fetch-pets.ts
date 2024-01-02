@@ -1,4 +1,4 @@
-import { Company, Pet } from '@prisma/client'
+import { Pet } from '@prisma/client'
 import { PetsRepository } from '@/repositories/pets-repository'
 
 interface FetchPetsByFiltersUseCaseRequest {
@@ -7,6 +7,7 @@ interface FetchPetsByFiltersUseCaseRequest {
     activity_lvl?: number
     wide_environment?: boolean
     smallness_lvl?: number
+    page?: number
 }
 
 interface FetchPetsByFiltersUseCaseResponse {
@@ -23,6 +24,7 @@ export class FetchPetsByFiltersUseCase {
         activity_lvl,
         wide_environment,
         smallness_lvl,
+        page,
     }: FetchPetsByFiltersUseCaseRequest): Promise<FetchPetsByFiltersUseCaseResponse> {
         const pets = await this.petRepository.fetchPets({
             userZipcode,
@@ -30,6 +32,7 @@ export class FetchPetsByFiltersUseCase {
             activity_lvl,
             wide_environment,
             smallness_lvl,
+            page,
         })
         return { pets }
     }

@@ -9,6 +9,7 @@ export async function fetch(request: FastifyRequest, reply: FastifyReply) {
         activity_lvl: z.number().optional(),
         wide_environment: z.boolean().optional(),
         smallness_lvl: z.number().optional(),
+        page: z.coerce.number().min(1).default(1),
     })
 
     const {
@@ -17,6 +18,7 @@ export async function fetch(request: FastifyRequest, reply: FastifyReply) {
         activity_lvl,
         wide_environment,
         smallness_lvl,
+        page,
     } = fetchBodySchema.parse(request.query)
 
     const fetchPetUseCase = makeFetchPetsUseCase()
@@ -27,6 +29,7 @@ export async function fetch(request: FastifyRequest, reply: FastifyReply) {
         activity_lvl,
         wide_environment,
         smallness_lvl,
+        page,
     })
 
     return reply.status(200).send(pets)

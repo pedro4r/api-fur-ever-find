@@ -39,16 +39,18 @@ describe('Fetch (e2e)', () => {
                 },
             })
 
-        await request(app.server)
-            .post(`/create/${company01Response.body.company.id}/pet`)
-            .set('Authorization', `Bearer ${company01Token}`)
-            .send({
-                name: 'Bjorn',
-                description: 'Lazy cat and affectionate',
-                activity_lvl: 3,
-                wide_environment: true,
-                smallness_lvl: 4,
-            })
+        for (let i = 0; i < 25; i++) {
+            await request(app.server)
+                .post(`/create/${company01Response.body.company.id}/pet`)
+                .set('Authorization', `Bearer ${company01Token}`)
+                .send({
+                    name: 'Bjorn',
+                    description: 'Lazy cat and affectionate',
+                    activity_lvl: 3,
+                    wide_environment: true,
+                    smallness_lvl: 4,
+                })
+        }
 
         await request(app.server)
             .post(`/create/${company01Response.body.company.id}/pet`)
@@ -77,10 +79,11 @@ describe('Fetch (e2e)', () => {
             .query({
                 userZipcode: '32835',
                 description: 'lazy',
+                page: 2,
             })
             .send()
 
-        expect(response.body.pets).toHaveLength(1)
+        expect(response.body.pets).toHaveLength(5)
         expect(response.body.pets[0].name).toEqual('Bjorn')
     })
 })

@@ -26,8 +26,10 @@ export class PrismaPetRepository implements PetsRepository {
         activity_lvl,
         wide_environment,
         smallness_lvl,
+        page,
     }: FetchPetsParams) {
         const prismaCompanyRepository = new PrismaCompanyRepository()
+
         const nearbyCompanies =
             await prismaCompanyRepository.findManyNearbyCompany(userZipcode)
 
@@ -48,6 +50,9 @@ export class PrismaPetRepository implements PetsRepository {
             )
 
             const result = await Promise.all(nearbyPets)
+
+            const startIndex = page ? (page - 1) * 20 : 0
+            const endIndex = page ? page * 20 : 20
 
             const petsWithMatchingWithOtherParams = result
                 .filter(
@@ -72,6 +77,7 @@ export class PrismaPetRepository implements PetsRepository {
                         smallness_lvl === undefined ||
                         pet.smallness_lvl?.toNumber() === smallness_lvl
                 )
+                .slice(startIndex, endIndex)
 
             return petsWithMatchingWithOtherParams
         } catch (error) {

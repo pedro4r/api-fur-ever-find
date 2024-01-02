@@ -26,7 +26,7 @@ export class InMemoryPetsRepository implements PetsRepository {
         return pet
     }
 
-    async fetchPets({ userZipcode, description, activity_lvl, wide_environment, smallness_lvl }: FetchPetsParams) {
+    async fetchPets({ userZipcode, description, activity_lvl, wide_environment, smallness_lvl, page }: FetchPetsParams) {
 
         const nearbyCompanies = await this.companiesRepository?.findManyNearbyCompany(userZipcode)
 
@@ -34,11 +34,15 @@ export class InMemoryPetsRepository implements PetsRepository {
             nearbyCompanies?.some((company) => pet.company_id === company.id)
         )
 
+        const startIndex = page ? (page - 1) * 20 : 0;
+        const endIndex = page ? page * 20 : 20;
+
         const petsWithMatchingWithOtherParams = petsWithMatchingCompanyIds
             .filter(pet => description === undefined || pet.description?.includes(description))
             .filter(pet => activity_lvl === undefined || pet.activity_lvl?.toNumber() === activity_lvl)
             .filter(pet => wide_environment === undefined || pet.wide_environment === wide_environment)
             .filter(pet => smallness_lvl === undefined || pet.smallness_lvl?.toNumber() === smallness_lvl)
+            .slice(startIndex, endIndex)
 
         return petsWithMatchingWithOtherParams
     }

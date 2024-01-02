@@ -14,7 +14,7 @@ describe('Search Pet Bt Zipcode Use Case', () => {
         petsRepository = new InMemoryPetsRepository(companiesRepository)
         sut = new FetchPetsByFiltersUseCase(petsRepository)
     })
-    it('should be able to find pets by zipcode only', async () => {
+    it('should be able to find 5 pets by zipcode only on page 2', async () => {
         await companiesRepository.create({
             id: 'company-01',
             admin_name: 'Pedro Requiao',
@@ -37,14 +37,16 @@ describe('Search Pet Bt Zipcode Use Case', () => {
             password_hash: await hash('123456', 6),
         })
 
-        await petsRepository.create({
-            name: 'Bjorn',
-            description: 'Lazy cat and fat',
-            activity_lvl: 3,
-            wide_environment: true,
-            smallness_lvl: 4,
-            company_id: 'company-01',
-        })
+        for (let i = 0; i < 25; i++) {
+            await petsRepository.create({
+                name: 'Bjorn',
+                description: 'Lazy cat and fat',
+                activity_lvl: 3,
+                wide_environment: true,
+                smallness_lvl: 4,
+                company_id: 'company-01',
+            })
+        }
 
         await petsRepository.create({
             name: 'Pixie',
@@ -55,10 +57,11 @@ describe('Search Pet Bt Zipcode Use Case', () => {
             company_id: 'company-02',
         })
 
-        const { pets } = await sut.execute({ userZipcode: '32839' })
+        const { pets } = await sut.execute({ userZipcode: '32839', page: 2 })
 
-        expect(pets).toHaveLength(1)
-        expect(pets).toEqual([expect.objectContaining({ name: 'Bjorn' })])
+        expect(pets).toHaveLength(5)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(pets![0]).toEqual(expect.objectContaining({ name: 'Bjorn' }))
     })
 
     it('should be able to find pets by params', async () => {
